@@ -2,10 +2,12 @@ JRE/
 JRE_old/
 Temp/
 *.pdf
-*.exe
+*.exe*
 *.dll
 *.jar
 *.zip
 *.log
 *.bak
+*.ini
+*.DAT
 .idea/
