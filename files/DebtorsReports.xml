@@ -1,0 +1,46 @@
+Debtors Age Analysis~DebtorsAgeAnalysis.jrxml~3~Range,from,to~4search:reports where report = 'debtors_age_analysis',1,1~Accnum,0,ZZ~1
+Debtors Age Analysis Reprint~DebtorsAgeAnalysisReprint.jrxml~1~Date~4distinct(date(date)):#monthenddebtors order by date~C~1
+Laybye Age Analysis~LaybyeAgeAnalysis.jrxml~3~Range,from,to~4search:reports where report = 'debtors_age_analysis',1,1~Accnum,0,ZZ~1
+Debtors Master Listing~DebtorsMasterListing.jrxml~3~Range,Debtors from,Debtors to~4search:reports where report = 'debtors_master_list',1,1~Accnum,0,ZZ~1
+Debtors Master Listing By Agent~DebtorsMasterListingByAgent.jrxml~1~Agent~4distinct agentnum:#agents order by agentnum asc~~1
+Debtors Master Listing By Area~DebtorsMasterListingByArea.jrxml~1~Area~4distinct descr:#location order by descr asc~~1
+Debtors Sales Ranking~DebtorsSalesRanking.jrxml~2~Date from,Date to~5,5~C,C~1
+Debtors Transaction Analysis~DebtorsTransactionAnalysis.jrxml~4~Date from,Date to,Acc from,Acc to~5,5,6D,6D~C,C,0,zz~1
+Debtors Transactions by Type~DebtorsTransaction.jrxml~4~Date from,Date to,Type,Payment~5,5,4dtype:doctype union select '%',4ptype:paytype union select '%'~F,C,Receipt,%~1
+Debtors Exempt Invoices~DebtorsExemptInvoices.jrxml~2~Date from,Date to~5,5~C,C~1
+Cash Invoice Listing - Vat~CashInvoiceListingVat.jrxml~2~Date from,Date to~5,5~F,C~1
+Cash Invoice Listing - Zero Rated~CashInvoiceListingZeroRated.jrxml~2~Date from,Date to~5,5~F,C~1
+Account Invoice Listing - Vat~AccountInvoiceListingVat.jrxml~2~Date from,Date to~5,5~F,C~1
+Account Invoice Listing - Zero Rated~AccountInvoiceListingZeroRated.jrxml~2~Date from,Date to~5,5~F,C~1
+Credit Note Listing - Vat~CreditNoteListingVat.jrxml~2~Date from,Date to~5,5~F,C~1
+Credit Note Listing - Zero Rated~CreditNoteListingZeroRated.jrxml~2~Date from,Date to~5,5~F,C~1
+Reprint Statement~StatementRe.jrxml~2~Acc num,Statement dated~6D,4distinct date:#monthenddebtors~A,C~0
+Debtors PDC Report~DebtorsPDCReport.jrxml~2~Debtors from,Debtors to~6D,6D~0,ZZ~1
+PDC Report - Met~PDCReportMet.jrxml~2~Date from,Date to~5,5~C,C~1
+PDC Report - Unmet~PDCReportUnmet.jrxml~2~Date from,Date to~5,5~C,C~1
+Debtors Control Totals~DebtorsControlTotals.jrxml~2~Date from,Date to~5,5~C,C~1
+Agents Commission Listing~AgentsCommissionListing.jrxml~3~Agent number,Date from,Date to~4AgentNum:#agents,5,5~A,F,C~1
+Agents Commission Summary~AgentsCommissionSummary.jrxml~2~Date from,Date to~5,5~F,C~1
+Vat Report~VatReport.jrxml~2~Date from,Date to~5,5~F,C~1
+Control Totals~DebtorsControlTotals.jrxml~2~Date from,Date to~5,5~F,C~1
+Stock Movement By Debtor~StockMovementByDebtor.jrxml~2~Accnum,Code~6D,6S~0,0~1
+Debtors Acc History~DebtorsAccHist.jrxml~3~Acc no,Date from,Date to~6D,4distinct(date(date)):#monthenddebtors order by date,4date(date) as tdate:#monthenddebtors union select date(now()) as tdate  order by tdate~0,2000-01-01,2000-01-01~1
+Sales by Hour Chart~SalesByHour3D.jrxml~1~Date~5~C~1
+Sales by Month Chart~SalesByMonth3D.jrxml~0~0~0~0~1
+Debtors Laybye List~DebtorsLaybyeList.jrxml~0~~~~0
+Log-In Log-Out~LogInLogOut.jrxml~3~User,Date from,Date to~4id:#users,5,5~ADM,F,C~1
+Invoice Analysis~InvoiceAnalysis.jrxml~1~Doc no~4 DISTINCT docnum:#sttrans WHERE transtype = '0'~0~1
+Quotation Analysis~QuoteAnalysis.jrxml~1~Doc no~4 DISTINCT docnum:#quotes~0~1
+Void Report~VoidReport.jrxml~3~User,Date from,Date to~4id:#users union select '%',5,5~ADM,F,C~1
+Sales Analysis~SalesAna.jrxml~3~Date from,Date to,Group~5,5,4search:reports where report = 'date'~F,C,year(date)~1
+Sales Analysis For Debtor~SalesAnaForDebtor.jrxml~4~Date from,Date to,Group,Accnum~5,5,4search:reports where report = 'date',6D~F,C,year(date),-~1
+User Performance~SalesmanPerformance.jrxml~3~Date from,Date to,User~5,5,4id:#users union select '%'~F,C,%~1
+Debtors Item History~DebtorsItemHistory.jrxml~3~Acc Num,Date from,Date to~4accNum:#debtors,5,5~A,C,C~1
+Price Changes Report~PriceChangesReport.jrxml~2~Date from,Date to~5,5~F,C~1
+Debtors Monthly Recon~DebtorsMonthlyRecon.jrxml~0~~~~0
+Sales by Day~SalesByDay.jrxml~2~Date from,Date to~5,5~F,C~1
+Invoice Vat & Exempt~InvoiceVatExempt.jrxml~2~Date from,Date to~5,5~F,C~1
+Quotation Report~QuotationReport.jrxml~3~User,Date from,Date to~4id:#users,5,5~ADM,F,C~1
+Unalocated Invoices~DbtUnallocatedInv.jrxml~0~~~~0
+Debtors Transaction VAT Detail~DebtorsTransactionVATDetail.jrxml~2~Date from,Date to~5,5~F,C~1
+Sales Analysis By Debtor~SalesAnaByDebtor.jrxml~3~Accnum,Date from,Date to~4accNum:#debtors,5,5~A,C,C~1

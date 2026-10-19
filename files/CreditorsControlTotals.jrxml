@@ -1,0 +1,911 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="CreditorsControlTotals"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<queryString><![CDATA[SELECT
+(SELECT IFNULL( round(sum(transAm)-sum(vatam),2) , '0') FROM ~#~dtrans where transtype = '0' and date between '~Date from~' and '~Date to~'  and vatam != '0') AS TotalInvoiceExcl,
+(SELECT IFNULL( round(sum(vatAm),2) , '0') FROM ~#~dtrans where transtype = '0' and date between '~Date from~' and '~Date to~' ) AS TotalInvoiceVat,
+(SELECT IFNULL( round(sum(abs(qty) * cost),2) , '0') FROM ~#~sttrans where transtype = '0' AND date between '~Date from~' and '~Date to~') AS TotalInvoiceCostExcl,
+(SELECT IFNULL( round(sum(abs(qty) * cost),2) , '0') FROM ~#~sttrans where transtype = '0' AND date between '~Date from~' and '~Date to~') AS TotalInvoiceCostVat,
+(SELECT IFNULL( sum(abs(qty)) , '0') FROM ~#~sttrans where transtype = '0' AND date between '~Date from~' and '~Date to~') AS TotalInvoiceQty,
+(SELECT IFNULL( round(sum(transam),2) , '0') FROM ~#~dtrans where transtype = '0' AND date between '~Date from~' and '~Date to~' and vatam = '0') AS TotalInvoiceExmpt,
+(SELECT IFNULL( round(sum(abs(qty) * cost),2) , '0') FROM ~#~sttrans where transtype = '0' AND date between '~Date from~' and '~Date to~' and vat = '0') AS TotalInvoiceExmptCost,
+(SELECT IFNULL( round(sum(transAm)*-1-sum(vatam),2) , '0') FROM ~#~dtrans where transtype = '8' and date between '~Date from~' and '~Date to~' ) AS TotalCrNotesExcl,
+(SELECT IFNULL( round(sum(vatAm),2) , '0') FROM ~#~dtrans where transtype = '8' and date between '~Date from~' and '~Date to~' ) AS TotalCrNotesVat,
+(SELECT IFNULL( round(sum(abs(qty) * cost),2) , '0') FROM ~#~sttrans where transtype = '8' AND date between '~Date from~' and '~Date to~') AS TotalCrNotesCostExcl,
+(SELECT IFNULL( round(sum(abs(qty) * cost)*0.14,2) , '0') FROM ~#~sttrans where transtype = '8' AND date between '~Date from~' and '~Date to~' and vat != '0') AS TotalCrNotesCostVat,
+(SELECT IFNULL( sum(abs(qty)) , '0') FROM ~#~sttrans where transtype = '8' AND date between '~Date from~' and '~Date to~') AS TotalCrNoteQty,
+(SELECT IFNULL( round(sum(abs(qty) * price),2) , '0') FROM ~#~sttrans where transtype = '8' AND date between '~Date from~' and '~Date to~' and vat = '0') AS TotalCrNoteExmptExcl,
+(SELECT IFNULL( round(sum(abs(qty) * cost),2) , '0') FROM ~#~sttrans where transtype = '8' AND date between '~Date from~' and '~Date to~' and vat = '0') AS TotalCrNoteExmptCost,
+(SELECT IFNULL( sum(abs(qty)*price) , '0') FROM ~#~sttrans where transtype = '6' AND date between '~Date from~' and '~Date to~') AS TotalGRNCostExcl,
+(SELECT IFNULL( round(sum(vat),2) , '0') FROM ~#~sttrans where transtype = '6' AND date between '~Date from~' and '~Date to~') AS TotalGRNCostVat,
+(SELECT IFNULL( round(sum(~#~sttrans.qty*~#~stockt2.sp1)*100/114,2) , '0') FROM ~#~sttrans, ~#~stockt2 where ~#~sttrans.code = ~#~stockt2.code and transtype = '6' AND date between '~Date from~' and '~Date to~') AS TotalGRNRSPExcl,
+(SELECT IFNULL( round(sum(~#~sttrans.qty*~#~stockt2.sp1)*0.14,2) , '0') FROM ~#~sttrans, ~#~stockt2 where ~#~sttrans.code = ~#~stockt2.code and ~#~sttrans.transtype = '6' AND ~#~sttrans.date between '~Date from~' and '~Date to~' AND ~#~sttrans.vat != '0') AS TotalGRNRSPVat,
+(SELECT IFNULL( sum(qty) , '0') FROM ~#~sttrans where transtype = '6' AND date between '~Date from~' and '~Date to~') AS TotalGRNQty,
+(SELECT IFNULL( round(sum(abs(qty) * price),2) , '0') FROM ~#~sttrans where transtype = '6' AND date between '~Date from~' and '~Date to~' and vat = '0') AS TotalGRNExmptCost,
+(SELECT IFNULL( round(sum(~#~sttrans.qty*~#~stockt2.sp1),2) , '0') FROM ~#~sttrans, ~#~stockt2 where ~#~sttrans.code = ~#~stockt2.code and transtype = '6' AND date between '~Date from~' and '~Date to~' and vat = '0') AS TotalGRNExmptRSP,
+(SELECT IFNULL( round(sum(transAm),2) , '0') FROM ~#~ctrans where transtype = '9' and date between '~Date from~' and '~Date to~' ) AS TotalCrdDrNotesCostExcl,
+(SELECT IFNULL( round(sum(vatam),2) , '0') FROM ~#~ctrans where transtype = '9' and date between '~Date from~' and '~Date to~' ) AS TotalCrdDrNotesCostVat,
+(SELECT IFNULL( round(sum(abs(~#~sttrans.qty)*~#~stockt2.sp1)*100/114,2) , '0') FROM ~#~sttrans, ~#~stockt2 where ~#~sttrans.code = ~#~stockt2.code and transtype = '9' AND date between '~Date from~' and '~Date to~') AS TotalCrdDrNotesRSPExcl,
+(SELECT IFNULL( sum(abs(qty)) , '0') FROM ~#~sttrans where transtype = '9' AND date between '~Date from~' and '~Date to~') AS TotalCrdDrNotesQty,
+(SELECT IFNULL( round(sum(abs(qty) * price),2) , '0') FROM ~#~sttrans where transtype = '9' AND date between '~Date from~' and '~Date to~' and vat = '0') AS TotalCrdDrNotesExmptCost,
+(SELECT IFNULL( round(sum(abs(~#~sttrans.qty)*~#~stockt2.sp1),2) , '0') FROM ~#~sttrans, ~#~stockt2 where ~#~sttrans.code = ~#~stockt2.code and transtype = '9' AND date between '~Date from~' and '~Date to~' and vat = '0') AS TotalCrdDrNotesExmptRSP,
+(SELECT IFNULL( round(sum(soh*acp),2) , '0') FROM ~#~stockt2 where soh > '0') AS StockValueAvgCostExcl,
+(SELECT IFNULL( round(sum(soh*cpe),2) , '0') FROM ~#~stockt2 where soh > '0') AS StockValueLatestCostExcl,
+(SELECT IFNULL( round(sum(soh*sp1)*100/114,2) , '0') FROM ~#~stockt2 where soh > '0') AS StockValueRSPExcl,
+(SELECT IFNULL( sum(soh) , '0') FROM ~#~stockt2 where soh > '0') AS TotalStockQty,
+(SELECT IFNULL( sum(abs(qty)) , '0') FROM ~#~sttrans where transtype = '2' AND date between '~Date from~' and '~Date to~') AS TotalDebitAdjQty,
+(SELECT IFNULL( sum(abs(qty)*price) , '0') FROM ~#~sttrans where transtype = '2' AND date between '~Date from~' and '~Date to~') AS TotalDebitAdjValue,
+(SELECT IFNULL( sum(abs(qty)) , '0') FROM ~#~sttrans where transtype = '3' AND date between '~Date from~' and '~Date to~') AS TotalCreditAdjQty,
+(SELECT IFNULL( sum(abs(qty)*price) , '0') FROM ~#~sttrans where transtype = '3' AND date between '~Date from~' and '~Date to~') AS TotalCreditAdjValue,
+(SELECT IFNULL( count(*) , '0') FROM ~#~dtrans where transtype = '0' and date between '~Date from~' and '~Date to~') AS NumCustomers,
+(SELECT IFNULL( round(sum(osbal),2) , '0') FROM ~#~debtors where laybye = '0' and accnum != 'CASH') AS TotalDebtorsOS,
+(SELECT IFNULL( round(sum(pdcbal),2) , '0') FROM ~#~debtors) AS TotalDebtorsPDC,
+(SELECT IFNULL( round(sum(osbal),2) , '0') FROM ~#~debtors where laybye = '1') AS TotalLaybye,
+(SELECT IFNULL( round(sum(transAm),2) , '0') FROM ~#~dtrans where transtype = '5' and date between '~Date from~' and '~Date to~' and accnum not in (SELECT IFNULL( accnum , '0') FROM ~#~debtors where laybye = '0')) AS TotalLaybyeReceipts,
+(SELECT IFNULL( round(sum(osbal),2) , '0') FROM ~#~creditors) AS TotalCreditorsOS,
+(SELECT IFNULL( round(sum(value),2) , '0') FROM ~#~pettycash where closed = '0' and num != 'NA' and date(pdate) = date(now())) AS TotalPettyCashOpen,
+(SELECT IFNULL( round(sum(transAm)*-1,2) , '0') FROM ~#~dtrans where transtype = 'P' and date between '~Date from~' and '~Date to~') AS TotalPettyCashClosed,
+(SELECT IFNULL( round(sum(transAm),2) , '0') FROM ~#~dtrans where transtype = '5'  and date between '~Date from~' and '~Date to~' and accnum not in (SELECT IFNULL( accnum , '0') FROM ~#~debtors where laybye = '1')) AS DebtorsReceipts,
+(SELECT IFNULL( round(sum(transAm)*-1,2) , '0') FROM ~#~dtrans where transtype = '7' and date between '~Date from~' and '~Date to~' and accnum not in (SELECT IFNULL( accnum , '0') FROM ~#~debtors where laybye = '1')) AS DebtorsDiscounts,
+(SELECT IFNULL( round(sum(transAm),2) , '0') FROM ~#~dtrans where transtype = '2'  and date between '~Date from~' and '~Date to~') AS DebtorsJournalDr,
+(SELECT IFNULL( round(sum(transAm * 0.14),2) , '0') FROM ~#~dtrans where transtype = '2'  and date between '~Date from~' and '~Date to~') AS DebtorsJournalDrVat,
+(SELECT IFNULL( round(sum(transAm)*-1,2) , '0') FROM ~#~dtrans where transtype = '3' and date between '~Date from~' and '~Date to~') AS DebtorsJournalCr,
+(SELECT IFNULL( round(sum((transAm)*-1) * 0.14,2) , '0') FROM ~#~dtrans where transtype = '3' and date between '~Date from~' and '~Date to~') AS DebtorsJournalCrVat,
+(SELECT IFNULL( round(sum(transAm),2) , '0') FROM ~#~dtrans where transtype = 'R' and date between '~Date from~' and '~Date to~') AS DebtorsRDCheque,
+(SELECT IFNULL( round(sum(transAm)*-1,2) , '0') FROM ~#~ctrans where transtype = '5' and date between '~Date from~' and '~Date to~') AS CreditorsPayment,
+(SELECT IFNULL( round(sum(transAm)*-1,2) , '0') FROM ~#~ctrans where transtype = '7' and date between '~Date from~' and '~Date to~') AS CreditorsDiscount,
+(SELECT IFNULL( round(sum(transAm),2) , '0') FROM ~#~ctrans where transtype = '2' and date between '~Date from~' and '~Date to~') AS CreditorsJournalDr,
+(SELECT IFNULL( round(sum(transAm * 0.14),2) , '0') FROM ~#~ctrans where transtype = '2' and date between '~Date from~' and '~Date to~') AS CreditorsJournalDrVat,
+(SELECT IFNULL( round(sum(transAm)*-1,2) , '0') FROM ~#~ctrans where transtype = '3' and date between '~Date from~' and '~Date to~') AS CreditorsJournalCr,
+(SELECT IFNULL( round(sum(transAm * 0.14)*-1,2) , '0') FROM ~#~ctrans where transtype = '3' and date between '~Date from~' and '~Date to~') AS CreditorsJournalCrVat]]></queryString>
+
+	<field name="TotalInvoiceExcl" class="java.lang.Double"/>
+	<field name="TotalInvoiceVat" class="java.lang.Double"/>
+	<field name="TotalInvoiceCostExcl" class="java.lang.Double"/>
+	<field name="TotalInvoiceCostVat" class="java.lang.Double"/>
+	<field name="TotalInvoiceQty" class="java.lang.Double"/>
+	<field name="TotalInvoiceExmpt" class="java.lang.Double"/>
+	<field name="TotalInvoiceExmptCost" class="java.lang.Double"/>
+	<field name="TotalCrNotesExcl" class="java.lang.Double"/>
+	<field name="TotalCrNotesVat" class="java.lang.Double"/>
+	<field name="TotalCrNotesCostExcl" class="java.lang.Double"/>
+	<field name="TotalCrNotesCostVat" class="java.lang.Double"/>
+	<field name="TotalCrNoteQty" class="java.lang.Double"/>
+	<field name="TotalCrNoteExmptExcl" class="java.lang.Double"/>
+	<field name="TotalCrNoteExmptCost" class="java.lang.Double"/>
+	<field name="TotalGRNCostExcl" class="java.lang.Double"/>
+	<field name="TotalGRNCostVat" class="java.lang.Double"/>
+	<field name="TotalGRNRSPExcl" class="java.lang.Double"/>
+	<field name="TotalGRNRSPVat" class="java.lang.Double"/>
+	<field name="TotalGRNQty" class="java.lang.Double"/>
+	<field name="TotalGRNExmptCost" class="java.lang.Double"/>
+	<field name="TotalGRNExmptRSP" class="java.lang.Double"/>
+	<field name="TotalCrdDrNotesCostExcl" class="java.lang.Double"/>
+	<field name="TotalCrdDrNotesCostVat" class="java.lang.Double"/>
+	<field name="TotalCrdDrNotesRSPExcl" class="java.lang.Double"/>
+	<field name="TotalCrdDrNotesQty" class="java.lang.Double"/>
+	<field name="TotalCrdDrNotesExmptCost" class="java.lang.Double"/>
+	<field name="TotalCrdDrNotesExmptRSP" class="java.lang.Double"/>
+	<field name="StockValueAvgCostExcl" class="java.lang.Double"/>
+	<field name="StockValueLatestCostExcl" class="java.lang.Double"/>
+	<field name="StockValueRSPExcl" class="java.lang.Double"/>
+	<field name="TotalStockQty" class="java.lang.Double"/>
+	<field name="TotalDebitAdjQty" class="java.lang.Double"/>
+	<field name="TotalDebitAdjValue" class="java.lang.Double"/>
+	<field name="TotalCreditAdjQty" class="java.lang.Double"/>
+	<field name="TotalCreditAdjValue" class="java.lang.Double"/>
+	<field name="NumCustomers" class="java.lang.Double"/>
+	<field name="TotalDebtorsOS" class="java.lang.Double"/>
+	<field name="TotalDebtorsPDC" class="java.lang.Double"/>
+	<field name="TotalLaybye" class="java.lang.Double"/>
+	<field name="TotalLaybyeReceipts" class="java.lang.Double"/>
+	<field name="TotalCreditorsOS" class="java.lang.Double"/>
+	<field name="TotalPettyCashOpen" class="java.lang.Double"/>
+	<field name="TotalPettyCashClosed" class="java.lang.Double"/>
+	<field name="DebtorsReceipts" class="java.lang.Double"/>
+	<field name="DebtorsDiscounts" class="java.lang.Double"/>
+	<field name="DebtorsJournalDr" class="java.lang.Double"/>
+	<field name="DebtorsJournalDrVat" class="java.lang.Double"/>
+	<field name="DebtorsJournalCr" class="java.lang.Double"/>
+	<field name="DebtorsJournalCrVat" class="java.lang.Double"/>
+	<field name="DebtorsRDCheque" class="java.lang.Double"/>
+	<field name="CreditorsPayment" class="java.lang.Double"/>
+	<field name="CreditorsDiscount" class="java.lang.Double"/>
+	<field name="CreditorsJournalDr" class="java.lang.Double"/>
+	<field name="CreditorsJournalDrVat" class="java.lang.Double"/>
+	<field name="CreditorsJournalCr" class="java.lang.Double"/>
+	<field name="CreditorsJournalCrVat" class="java.lang.Double"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="50"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="1"
+						y="26"
+						width="534"
+						height="15"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Control Totals]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="1"
+						y="8"
+						width="534"
+						height="18"
+						key="staticText-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[~A~]]></text>
+				</staticText>
+				<line direction="BottomUp">
+					<reportElement
+						x="1"
+						y="41"
+						width="535"
+						height="0"
+						forecolor="#000000"
+						key="line-1"/>
+					<graphicElement stretchType="NoStretch" pen="2Point"/>
+				</line>
+				<line direction="BottomUp">
+					<reportElement
+						x="1"
+						y="8"
+						width="535"
+						height="0"
+						forecolor="#000000"
+						key="line-2"/>
+					<graphicElement stretchType="NoStretch" pen="2Point"/>
+				</line>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="15"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="1"
+						width="412"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-8"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Date from ~Date from~ to ~Date to~]]></text>
+				</staticText>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="642"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="19"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalGRNCostExcl}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="19"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total GRN Cost (Excl)]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="38"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalGRNCostVat}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="38"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total GRN Cost Vat]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="57"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalGRNRSPExcl}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="57"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total GRN RSP (Excl)]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="76"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalGRNRSPVat}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="76"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total GRN RSP Vat]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="95"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalGRNQty}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="95"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total GRN Qty]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="114"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalGRNExmptCost}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="114"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total GRN Exempt Cost]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="133"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalGRNExmptRSP}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="133"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total GRN Exempt RSP]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="152"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalCrdDrNotesCostExcl}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="152"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Crd Dr Notes Cost Excl]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="171"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalCrdDrNotesCostVat}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="171"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Crd Dr Notes Cost Vat]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="170"
+						y="188"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalCrdDrNotesRSPExcl}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="0"
+						y="188"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Dr Notes RSP (Excl)]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="19"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalCrdDrNotesQty}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="19"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Dr Notes Qty]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="38"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalCrdDrNotesExmptCost}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="38"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Dr Notes Exempt Cost CostxmptCost]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="57"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalCrdDrNotesExmptRSP}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="57"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Dr Notes Exempt RSP]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="76"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{TotalCreditorsOS}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="76"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Total Creditors O/S Balance]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="95"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{CreditorsPayment}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="95"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Creditors Payment]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="114"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{CreditorsDiscount}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="114"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Creditors Discount]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="133"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{CreditorsJournalDr}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="133"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Creditors Journal Dr.]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="171"
+						width="90"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{CreditorsJournalCr}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="171"
+						width="170"
+						height="17"
+						key="staticText"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Creditors Journal Cr.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="5"
+						width="535"
+						height="14"
+						forecolor="#FFFFFF"
+						backcolor="#999999"
+						key="staticText-5"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Creditors]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="150"
+						width="170"
+						height="17"
+						key="staticText-11"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Creditors Journal Dr. Vat]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Transparent"
+						x="273"
+						y="188"
+						width="170"
+						height="17"
+						key="staticText-12"
+						positionType="Float"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Creditors Journal Cr. Vat]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="150"
+						width="90"
+						height="17"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{CreditorsJournalDrVat}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="445"
+						y="188"
+						width="90"
+						height="18"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Double"><![CDATA[$F{CreditorsJournalCrVat}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="27"  isSplitAllowed="true" >
+				<line direction="TopDown">
+					<reportElement
+						x="1"
+						y="3"
+						width="535"
+						height="0"
+						forecolor="#000000"
+						key="line-3"/>
+					<graphicElement stretchType="NoStretch" pen="2Point"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="482"
+						y="7"
+						width="50"
+						height="19"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Verdana" pdfFontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="CP1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="400"
+						y="7"
+						width="80"
+						height="19"
+						key="textField-2"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="158"
+						y="7"
+						width="220"
+						height="19"
+						key="staticText-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="Verdana" size="10" isBold="false"/>
+					</textElement>
+				<text><![CDATA[~A~]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="yyyy-MM-dd HH:mm:ss" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="7"
+						width="123"
+						height="19"
+						key="textField-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

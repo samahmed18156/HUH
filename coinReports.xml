@@ -1,0 +1,1 @@
+Coin Voucher status~COINSREPORT.jrxml~3~Date from,Date to,Status~5,5,4'USED':dual union select 'UNUSED' union select '%'~C,C,USED~1

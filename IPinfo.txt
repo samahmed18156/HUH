@@ -1,0 +1,29 @@
+SERVER
+false
+none
+false
+none
+false
+none
+true
+35
+false
+\\127.0.0.1\Zebra
+false
+, osbal
+concat('<html><B>Coreg: </B>',coreg,'</HTML>')
+
+Line 1: IP Address Of Server
+Line 2: Pole Display connected (true/false)
+Line 3: Pole Display Port
+Line 4: Receipt Printer connected (true/false)
+Line 5: Receipt Printer Port
+Line 6: Cash Drawer connected (true/false)
+Line 7: Cash Drawer Port
+Line 8: Paging Stock Data  (true/false)
+Line 9: Page File Size
+Line 10: Barcode Printer connected (true/false)
+Line 11: Barcode Printer Port
+Line 12: TouchScreen Connected (true/false)
+Line 13: Three (3) Custom fields for Invoice
+Line 14: Three (3) Custom fields for Debtors details in Invoicing

@@ -1,0 +1,5 @@
+CASH BOOK~CashBook.jrxml~2~ACC,Date~4 distinct num:#bank,4 distinct tdate as tdate:#bank~C,2000-01-01~1
+Income Statement~IncomeStatement.jrxml~2~Date from,Date to~5,5~F,C~1
+Income Statement Summary~IncomeStatementSum.jrxml~2~Date from,Date to~5,5~F,C~1
+Expense Details~ExpenseDetails.jrxml~3~Date from,Date to,Expense~5,5,4 distinct expCode:#ctrans order by expcode~F,C,-~1
+TRIAL BALANCE~TrialBalance.jrxml~2~Date from,Date to~5,5~F,C~1

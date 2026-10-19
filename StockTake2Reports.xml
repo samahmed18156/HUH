@@ -1,0 +1,5 @@
+Location Content~Shelf Content.jrxml~1~Shelf number~1~ ~0
+Locations Captured~Shelfs Done.jrxml~0~ ~ ~ ~0
+Variance Report Counted Items~VarianceReportCountedm1.jrxml~1~Warehouse~4sohwh:#qohwh union select '%' Union select 'SOH'~SOH~1
+Variance Report All Items~VarianceReportAllm1.jrxml~1~Warehouse~4sohwh:#qohwh union select '%' Union select 'SOH'~SOH~1
+Variance Report by Department~VarianceReportDeptm1.jrxml~1~Dept~4num:#departments~0~1

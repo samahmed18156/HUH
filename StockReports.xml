@@ -1,0 +1,43 @@
+Stock Master~StockMaster.jrxml~4~Range,From,To,SOH~4search:reports where report = 'master_list',1,1,4search:reports where report = 'SOH'~code,0,ZZ,> 0~1
+Stock Master By Warehouse~StockMasterByWH.jrxml~5~Range,From,To,SOH,Warehouse~4search:reports where report = 'master_list',1,1,4search:reports where report = 'SOH',4sohwh:#qohwh union select '%' Union select 'SOH'~code,0,ZZ,> 0,SOH~1
+Stock Master By Department~StockMasterByDept.jrxml~5~Range,From,To,Dept,SOH~4search:reports where report = 'master_list',1,1,4dept:#stockt2 order by dept,4search:reports where report = 'SOH'~code,0,zz,NONE,> 0~1
+Stock Master By Supplier~StockMasterBySupplier.jrxml~2~Supplier from,Supplier to~6C,6C~0,zz~1
+Stock Master By Category~StockMasterByCategory.jrxml~5~Range,From,To,Category,SOH>~4search:reports where report = 'master_list',1,1,4category:#stockt2 order by category,2~code,0,zz,NONE,-999~1
+Stock Master By Type~StockMasterByType.jrxml~5~Range,From,To,Type,SOH>~4search:reports where report = 'master_list',1,1,4type:#stockt2 order by type,2~code,0,zz,NONE,-999~1
+Stock Master By Size~StockMasterBySize.jrxml~4~Range,From,To,SOH>~4search:reports where report = 'master_list',1,1,2~code,0,ZZ,-999~1
+Stock Master By Size By Department~StockMasterBySizeByDepartment.jrxml~5~Range,From,To,Dept,SOH>~4search:reports where report = 'master_list',1,1,4descr:#departments union select '%',2~code,0,ZZ,NONE,-999~1
+Sales Analysis By Dept~SalesAnalysisByDept.jrxml~3~Date from,Date to,Warehouse~5,5,4sohwh:#qohwh union select '%' Union select 'SOH'~F,C,SOH~1
+Sales Analysis By Item~SalesAnaItem.jrxml~4~Date from,Date to,Qty,Warehouse~5,5,2,4sohwh:#qohwh union select '%' Union select 'SOH'~F,C,-9999,SOH~1
+Sales Analysis By Item in Dept~SalesAnaItemInDept.jrxml~3~Date from,Date to,Dept~5,5,4dept:#stockt2 order by dept~F,C,NA~1
+Sales Analysis By Creditor~SalesAnalysisByCreditor.jrxml~3~Date from,Date to,Creditor~5,5,6C~F,C,%~1
+Sales Analysis By Item - Mtd/Ytd~SalesAnalysisByItemMtdYtd.jrxml~2~Code from,Code to~1,1~0,zz~1
+Sales Analysis By Dept - Mtd/Ytd~SalesAnalysisByDeptMtdYtd.jrxml~3~Dept,Date from,Date to~4num:#departments,5,5~0,F,C~1
+Sales Analysis By Item/Dept/Supplier - Mtd/Ytd~SalesAnalysisByItemMtdYtd_Dept.jrxml~4~Code from,Code to,Dept,Supplier~1,1,4Dept:#stockt2 union select '%' order by Dept,4suply:#stockt2 union select '%'~0,ZZ,-,-~1
+Sales Analysis By Promotion~SalesAnalysisByPromotion.jrxml~2~Promo start,Promo end~4distinct promostart:#stockt2 order by promostart desc,4distinct promoend:#stockt2 order by promoend desc~0,0~1
+Sales By Dept By Month~SalesAnalysisByDeptByMonth.jrxml~2~Date from,Date to~5,5~F,C~1
+Stock Purchase Report~StockPurchaseReport.jrxml~2~Code from,Code to~6S,6S~0,zz~1
+Condensed Stock Report~CondensedStockReport.jrxml~2~Dept from,Dept to~4num:#departments,4num:#departments~0,0~1
+Price List~PriceList.jrxml~5~Range,From,To,SOH>,SP~4search:reports where report = 'master_list',1,1,2,4search:reports where report = 'SP'~code,0,ZZ,-999,sp1~1
+Zero SOH~ZeroSOH.jrxml~3~Range,From,To~4search:reports where report = 'master_list',1,1~code,0,zz~1
+Negative Stock Report~StockNegatives.jrxml~0~ ~ ~ ~1
+Stock Valuation~StockValuation.jrxml~0~0~0~0~1
+Stock Valuation Summary~StockValuationSumm.jrxml~0~0~0~0~1
+Stock Valuation By Dept By Item~StockValuationByDeptByItem.jrxml~1~Dept~4distinct num:#departments order by num~0,0~1
+Stock Valuation By Dept~StockValuationByDept3D.jrxml~0~ ~ ~ ~1
+Stock Valuation By Warehouse~StockValuationByWH.jrxml~1~Warehouse~4sohwh:#qohwh union select '%' Union select 'SOH'~SOH~1
+Stock Valuation Reprint~StockValuationReprint.jrxml~1~Date~4distinct Date:#monthendstock2~F~0
+Top Sellers~Top Sellers.jrxml~3~Date from,Date to,Quantity~5,5,2~F,C,50~1
+Slow Moving Stock~SlowMovingStock.jrxml~3~Date last sold,Quantity,Dept~5,2,4dept:#stockt2 union select '%' order by dept~2001-01-01,50,NA~1
+Stock Movement~StockMovement.jrxml~1~Code~6S~0~1
+Stock Movement (All Time)~StockMovementAllTime.jrxml~1~Code~6S~0~1
+Stock Movement By Agent~StockMovementByAgent.jrxml~3~Date from,Date to,Agent~5,5,4distinct agentnum:#agents order by agentnum ASC~F,C,0~1
+Stock Adj Credits~Stock Adj Credits.jrxml~3~Date from,Date to,Warehouse~5,5,4sohwh:#qohwh union select '%' Union select 'SOH'~F,C,SOH~1
+Stock Adj Debits~Stock Adj Debits.jrxml~3~Date from,Date to,Warehouse~5,5,4sohwh:#qohwh union select '%' Union select 'SOH'~F,C,SOH~1
+Stock Re - Order~StockReOrder.jrxml~1~Dept~4distinct num:#departments order by num~0,0~1
+Laybye Stock Report~LaybyeStock.jrxml~0~0~0~0~1
+Item History~ItemHistory.jrxml~1~Code~6S~0~1
+Item History with sizes~ItemHistoryBySize.jrxml~1~Code~6S~0~1
+Stock Price Changes Report~StockPriceChangesReport.jrxml~2~Date from,Date to~5,5~F,C~1
+Stock Sample Report~StockSampleReport.jrxml~4~Range,From,To,SOH>~4search:reports where report = 'master_list',1,1,2~code,0,ZZ,-999~1
+Linked Items Report~LinkedItems.jrxml~1~Code~6S~0~1
+Minimum Mark Up On Stock~StockMinMUReport.jrxml~1~Min MU~1~10~1

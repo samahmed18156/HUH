@@ -1,0 +1,13 @@
+Creditors Master Listing~CreditorsMasterListing.jrxml~3~Range,Creditors from,Creditors to~4search:reports where report = 'debtors_master_list',1,1~Accnum,0,ZZ~1
+Creditors Transaction Analysis~CreditorsTransactionAnalysis.jrxml~4~Date from,Date to,Acc from,Acc to~5,5,6C,6C~C,C,0,zz~1
+Creditors Age Analysis~CreditorsAgeAnalysis.jrxml~4~Range,From,To,Type~4search:reports where report = 'creditors_age_analysis',1,1,4distinct ctype:#creditors~Accnum,0,ZZ,-~1
+Creditors Age Analysis Reprint~CreditorsAgeAnalysisReprint.jrxml~1~Date~4distinct(date(date)):#monthendcreditors order by date~C~1
+Creditors Transaction Summary~CreditorsTransAudtSum.jrxml~2~Date from,Date to,~5,5~F,C~1
+Creditors Transactions~CreditorsTransAuditDetail.jrxml~3~Date from,Date to,Type~5,5,4distinct(ctype):#creditors~F,C,%~1
+Control Totals~CreditorsControlTotals.jrxml~2~Date from,Date to~5,5~F,C~1
+Creditors Transactions by Type~CreditorsTransaction.jrxml~3~Date from,Date to,Type~5,5,4dtype:doctype~F,C,Receipt~1
+Creditors Purchase Report~CreditorsPurchaseReport.jrxml~2~Acc from,Acc to~6C,6C~0,zz~1
+Creditors Acc History~CreditorsAccHist.jrxml~3~Acc no,Date from,Date to~6C,4distinct(date(date)):#monthendcreditors order by date,4date(date) as tdate:#monthendcreditors union select date(now()) as tdate  order by tdate~0,2000-01-01,2000-01-01~1
+Purchase orders~PurchaseOrders.jrxml~4~Code,Accnum,Ref,Dept~6S,6C,1,4dept:#stockt2 union select '%' ~%,%,%,%~1
+Invoices By Supplier~InvoicesBySupplier.jrxml~3~Date from,Date to,Type~5,5,4ctype:#creditors~F,C,Expense~1
+Creditors Transaction VAT Detail~CreditorsTransactionVATDetail.jrxml~2~Date from,Date to~5,5~F,C~1
