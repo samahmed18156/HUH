@@ -1,0 +1,11 @@
+JRE/
+JRE_old/
+Temp/
+*.pdf
+*.exe
+*.dll
+*.jar
+*.zip
+*.log
+*.bak
+.idea/
